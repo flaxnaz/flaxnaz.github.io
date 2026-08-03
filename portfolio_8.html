@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flaxon Nazareth — Space Systems Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070B12;
+  --bg2: #0D1420;
+  --bg3: #131C2E;
+  --border: rgba(99,180,255,0.12);
+  --border2: rgba(99,180,255,0.22);
+  --teal: #1DDFAA;
+  --blue: #63B4FF;
+  --purple: #A78BFA;
+  --amber: #F59E0B;
+  --red: #F87171;
+  --text: #E8F0FF;
+  --text2: #7A90B8;
+  --text3: #4A5A78;
+  --mono: 'DM Mono', monospace;
+  --display: 'Syne', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(99,180,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,180,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Glow orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+.orb-1 { width: 500px; height: 500px; background: rgba(29,223,170,0.06); top: -100px; right: -100px; }
+.orb-2 { width: 400px; height: 400px; background: rgba(99,180,255,0.05); bottom: 20%; left: -80px; }
+
+/* ORBITAL SCENE — decorative background: Earth+Moon, Mars, rocket trajectory */
+.orbital-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.earth-system {
+  position: absolute;
+  top: 9%;
+  right: 7%;
+  width: 23vmin;
+  height: 23vmin;
+  animation: earthZoomIn 2.6s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.earth {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(99,180,255,0.38);
+  background: radial-gradient(circle at 34% 30%, rgba(99,180,255,0.14), rgba(29,223,170,0.05) 55%, transparent 75%);
+  box-shadow: 0 0 60px rgba(99,180,255,0.08);
+}
+.earth::after {
+  content: '';
+  position: absolute;
+  inset: -16%;
+  border-radius: 50%;
+  border: 1px dashed rgba(99,180,255,0.16);
+}
+
+.moon-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 195%;
+  height: 195%;
+  margin-top: -97.5%;
+  margin-left: -97.5%;
+  animation: moonOrbit 46s linear infinite;
+}
+.moon {
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  width: 7.5%;
+  height: 7.5%;
+  margin-top: -3.75%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(167,139,250,0.55);
+  background: rgba(167,139,250,0.12);
+}
+
+.mars {
+  position: absolute;
+  bottom: 12%;
+  left: 3%;
+  width: 9vmin;
+  height: 9vmin;
+  border-radius: 50%;
+  border: 1.5px solid rgba(248,113,113,0.4);
+  background: radial-gradient(circle at 38% 34%, rgba(248,113,113,0.16), transparent 70%);
+  opacity: 0;
+  animation: fadeIn 2s ease-out 0.7s both;
+}
+
+.trajectory {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes earthZoomIn {
+  from { opacity: 0; transform: scale(0.55); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes moonOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 1100px) {
+  .orbital-scene { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .earth-system, .mars { animation: none; opacity: 1; transform: none; }
+  .moon-orbit { animation: none; }
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(7,11,18,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--teal);
+  letter-spacing: -0.02em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--teal); }
+
+.nav-cta {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--teal);
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .2s;
+  letter-spacing: .04em;
+}
+.nav-cta:hover { background: rgba(29,223,170,0.08); }
+
+/* HERO */
+.hero {
+  padding: 140px 0 80px;
+  position: relative;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(29,223,170,0.2);
+  padding: 4px 12px;
+  border-radius: 2px;
+}
+.hero-tag::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: .3; }
+}
+
+h1 {
+  font-family: var(--display);
+  font-size: clamp(42px, 7vw, 72px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+
+h1 span { color: var(--teal); }
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--text2);
+  max-width: 560px;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text3);
+}
+.meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: var(--bg);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity .2s;
+  letter-spacing: .02em;
+}
+.btn-primary:hover { opacity: .85; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border2);
+  padding: 10px 24px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .2s;
+  letter-spacing: .02em;
+}
+.btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+/* STATS BAR */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 3rem 0;
+}
+
+.stat-item {
+  background: var(--bg2);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.stat-val {
+  font-family: var(--display);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--teal);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-lbl {
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* SECTION */
+.section {
+  padding: 4rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.section-label {
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+}
+
+.section-title {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+  color: var(--text);
+}
+
+/* PROJECTS */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.proj-card {
+  background: var(--bg2);
+  padding: 1.75rem;
+  transition: background .2s;
+  position: relative;
+}
+.proj-card:hover { background: var(--bg3); }
+
+.proj-accent {
+  width: 36px;
+  height: 3px;
+  border-radius: 2px;
+  margin-bottom: 1.25rem;
+}
+
+.proj-name {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: .25rem;
+  letter-spacing: -0.01em;
+}
+
+.proj-type {
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.proj-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+.proj-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: var(--bg);
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.proj-metric-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+}
+.proj-metric-key { color: var(--text3); }
+.proj-metric-val { color: var(--teal); font-weight: 500; text-align: right; }
+
+.proj-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+}
+
+.tag {
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid;
+}
+.tag-teal { color: var(--teal); border-color: rgba(29,223,170,0.25); background: rgba(29,223,170,0.06); }
+.tag-blue { color: var(--blue); border-color: rgba(99,180,255,0.25); background: rgba(99,180,255,0.06); }
+.tag-purple { color: var(--purple); border-color: rgba(167,139,250,0.25); background: rgba(167,139,250,0.06); }
+.tag-amber { color: var(--amber); border-color: rgba(245,158,11,0.25); background: rgba(245,158,11,0.06); }
+.tag-red { color: var(--red); border-color: rgba(248,113,113,0.25); background: rgba(248,113,113,0.06); }
+
+.proj-links { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+
+.proj-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(99,180,255,0.3);
+  padding-bottom: 1px;
+  transition: border-color .2s;
+}
+.proj-link:hover { border-color: var(--blue); }
+.proj-link.live { color: var(--teal); border-bottom-color: rgba(29,223,170,0.3); }
+.proj-link.live:hover { border-color: var(--teal); }
+
+/* SKILLS */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.skill-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  transition: border-color .2s;
+}
+.skill-card:hover { border-color: var(--border2); }
+
+.skill-name {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.skill-desc { font-size: 11px; color: var(--text3); margin-bottom: 10px; }
+
+.bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+/* TIMELINE */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 8px; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--teal), transparent);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2rem;
+  top: 8px;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 3px rgba(29,223,170,0.2);
+}
+
+.timeline-date {
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.timeline-title {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.timeline-org { font-size: 12px; color: var(--text3); margin-bottom: 8px; }
+.timeline-desc { font-size: 13px; color: var(--text2); line-height: 1.7; }
+
+/* CONTACT */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.contact-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  text-decoration: none;
+  transition: all .2s;
+  display: block;
+}
+.contact-card:hover {
+  border-color: var(--teal);
+  background: rgba(29,223,170,0.04);
+}
+.contact-label { font-size: 10px; color: var(--text3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+.contact-val { font-size: 13px; color: var(--teal); }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: .04em;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+  opacity: 0;
+  animation: fadeUp .6s ease forwards;
+}
+.delay-1 { animation-delay: .1s; }
+.delay-2 { animation-delay: .2s; }
+.delay-3 { animation-delay: .3s; }
+.delay-4 { animation-delay: .4s; }
+
+@media (max-width: 600px) {
+  .stats-bar { grid-template-columns: repeat(2,1fr); }
+  nav .nav-links { display: none; }
+  h1 { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="orbital-scene" aria-hidden="true">
+  <div class="earth-system">
+    <div class="earth"></div>
+    <div class="moon-orbit"><div class="moon"></div></div>
+  </div>
+  <div class="mars"></div>
+  <svg class="trajectory" viewBox="0 0 1000 1000" preserveAspectRatio="none" focusable="false">
+    <path id="flightPath" d="M 780,230 C 560,470 380,620 130,740" fill="none" stroke="rgba(245,158,11,0.3)" stroke-width="1.4" stroke-dasharray="6 9" />
+    <circle r="5" fill="#F59E0B" opacity="0.9">
+      <animateMotion dur="26s" repeatCount="indefinite" rotate="auto">
+        <mpath href="#flightPath"></mpath>
+      </animateMotion>
+    </circle>
+  </svg>
+</div>
+
+<nav>
+  <div class="nav-logo">FN_</div>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://github.com/flaxnaz" class="nav-cta" target="_blank">github.com/flaxnaz →</a>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag fade-up">Available for roles · Sydney, AU</div>
+    <h1 class="fade-up delay-1">Flaxon<br><span>Nazareth</span></h1>
+    <p class="hero-sub fade-up delay-2">
+      Space systems and aeronautical engineering graduate. MEng (Space Systems) UNSW · BTech (Aeronautical) MIT Manipal. Building open-source tools across cis-lunar mission analysis, satellite telemetry, ground station scheduling, conjunction screening, and collision avoidance.
+    </p>
+    <div class="hero-meta fade-up delay-3">
+      <div class="meta-item"><div class="meta-dot"></div>MEng Space Systems · UNSW Sydney</div>
+      <div class="meta-item"><div class="meta-dot"></div>BTech Aeronautical · MIT Manipal</div>
+      <div class="meta-item"><div class="meta-dot"></div>Python · Go · TypeScript · C++ · MATLAB</div>
+      <div class="meta-item"><div class="meta-dot"></div>485 Graduate Visa · Full work rights</div>
+      <div class="meta-item"><div class="meta-dot"></div>Open to relocation, nationally & internationally</div>
+    </div>
+    <div class="hero-actions fade-up delay-4">
+      <a href="https://github.com/flaxnaz" class="btn-primary" target="_blank">View GitHub</a>
+      <a href="https://linkedin.com/in/flaxon-nazareth" class="btn-ghost" target="_blank">LinkedIn</a>
+      <a href="mailto:flaxnaz@gmail.com" class="btn-ghost">flaxnaz@gmail.com</a>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar fade-up">
+    <div class="stat-item">
+      <div class="stat-val">7</div>
+      <div class="stat-lbl">Open-source projects</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">76k</div>
+      <div class="stat-lbl">Orbit steps computed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">2,000+</div>
+      <div class="stat-lbl">Objects screened, single pass</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">0%</div>
+      <div class="stat-lbl">Packet loss rate</div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <div class="section-label">Portfolio</div>
+    <div class="section-title">Projects</div>
+    <div class="projects-grid">
+
+      <div class="proj-card">
+        <div class="proj-accent" style="background:var(--amber)"></div>
+        <div class="proj-name">sda-tracker</div>
+        <div class="proj-type">Live space domain awareness dashboard</div>
+        <div class="proj-desc">
+          Real-time dashboard pulling live TLE and CDM data from Space-Track for LEO and MEO/GEO regimes, propagated with SGP4 and screened geometrically for close approaches, animated by actual orbital periods. Lunar tab runs a real CR3BP/DOP853 NRHO propagation, the same methodology as the thesis. Refreshes automatically via a scheduled GitHub Actions pipeline.
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric-row"><span class="proj-metric-key">Data source</span><span class="proj-metric-val">Space-Track GP + CDM, live</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Screening</span><span class="proj-metric-val">Real SGP4, 24h window</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Lunar propagation</span><span class="proj-metric-val">CR3BP · DOP853 · rtol=1e-9</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Pipeline</span><span class="proj-metric-val">GitHub Actions · every 6h</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-teal">Python</span>
+          <span class="tag tag-red">SGP4 / CR3BP</span>
+          <span class="tag tag-blue">Space-Track API</span>
+          <span class="tag tag-amber">GitHub Actions</span>
+        </div>
+        <div class="proj-links">
+          <a href="https://github.com/flaxnaz/sda-tracker" class="proj-link" target="_blank">github →</a>
+          <a href="https://flaxnaz.github.io/sda-tracker/" class="proj-link live" target="_blank">live dashboard →</a>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-accent" style="background:var(--teal)"></div>
+        <div class="proj-name">nrho-visibility</div>
+        <div class="proj-type">Cis-lunar mission analysis</div>
+        <div class="proj-desc">
+          Python port of MATLAB/HALO thesis pipeline. Propagates Near Rectilinear Halo Orbits and computes LOS, TX-gated, and SNR-gated S-band coverage for three lunar surface sites. Core propagation and frame conversion also ported to Go.
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric-row"><span class="proj-metric-key">Propagation</span><span class="proj-metric-val">76,593 steps · 26.6 days</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Integrator</span><span class="proj-metric-val">DOP853 · rtol=1e-9</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">S-band margin</span><span class="proj-metric-val">25.75 dB at 60,000 km</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Tests</span><span class="proj-metric-val">36 · GitHub Actions CI · mypy</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-teal">Python</span>
+          <span class="tag tag-teal">Go</span>
+          <span class="tag tag-blue">Astrodynamics</span>
+          <span class="tag tag-purple">NRHO</span>
+        </div>
+        <div class="proj-links">
+          <a href="https://github.com/flaxnaz/nrho-visibility" class="proj-link" target="_blank">github →</a>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-accent" style="background:var(--red)"></div>
+        <div class="proj-name">conjunction-screener</div>
+        <div class="proj-type">Satellite conjunction screening</div>
+        <div class="proj-desc">
+          Pulls live TLE data from Space-Track, propagates with SGP4, and flags close approaches against a primary satellite. Auto-discovers candidates by orbital regime, filters catalog duplicates via separation-variance analysis, and integrates the real, access-restricted CDM endpoint.
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric-row"><span class="proj-metric-key">Screened</span><span class="proj-metric-val">97 objects, single 48h pass</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Discovery</span><span class="proj-metric-val">Perigee/apogee regime match</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Tests</span><span class="proj-metric-val">25 · mypy strict · CI</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Dashboard</span><span class="proj-metric-val">Live · refreshed every 6h</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-teal">Python</span>
+          <span class="tag tag-red">SGP4</span>
+          <span class="tag tag-blue">Space-Track API</span>
+          <span class="tag tag-amber">GitHub Actions</span>
+        </div>
+        <div class="proj-links">
+          <a href="https://github.com/flaxnaz/conjunction-screener" class="proj-link" target="_blank">github →</a>
+          <a href="https://flaxnaz.github.io/conjunction-screener/" class="proj-link live" target="_blank">live dashboard →</a>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-accent" style="background:var(--red)"></div>
+        <div class="proj-name">orbital-sentinel</div>
+        <div class="proj-type">Space domain awareness &amp; collision avoidance</div>
+        <div class="proj-desc">
+          Solstice-OS-style pipeline: ingests live TLE and Conjunction Data Message feeds from Space-Track, classifies collision risk via probability-of-collision tiering (CDM-reported Pc preferred over a self-computed covariance model), and computes Clohessy-Wiltshire-based avoidance manoeuvres with delta-v and propellant-cost estimates. Filters catalog-duplicate false positives via separation-variance analysis.
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric-row"><span class="proj-metric-key">Screened</span><span class="proj-metric-val">2,000+ objects, single pass</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Risk tiering</span><span class="proj-metric-val">Pc-based · CDM-preferred</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">CAM planning</span><span class="proj-metric-val">CW-based Δv + propellant cost</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Tests</span><span class="proj-metric-val">79 · mypy strict · CI</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-teal">Python</span>
+          <span class="tag tag-red">SGP4 / DOP853</span>
+          <span class="tag tag-blue">Space-Track API</span>
+          <span class="tag tag-amber">GitHub Actions</span>
+        </div>
+        <div class="proj-links">
+          <a href="https://github.com/flaxnaz/orbital-sentinel" class="proj-link" target="_blank">github →</a>
+          <a href="https://flaxnaz.github.io/orbital-sentinel/dashboard/" class="proj-link live" target="_blank">live dashboard →</a>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-accent" style="background:var(--blue)"></div>
+        <div class="proj-name">ground-station-scheduler</div>
+        <div class="proj-type">Constellation orchestration platform</div>
+        <div class="proj-desc">
+          Full-stack Go + TypeScript platform computing satellite visibility, RF link feasibility, and priority-based conflict resolution across a multi-station network. Upgraded from analytic Keplerian propagation to real Space-Track SGP4 ingestion, independently cross-validated in GMAT.
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric-row"><span class="proj-metric-key">Synthetic</span><span class="proj-metric-val">189 passes · 6 stations · 90% util</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Real (Space-Track)</span><span class="proj-metric-val">~54 windows · ~65% util</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">API</span><span class="proj-metric-val">Go REST · sync + live endpoints</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Validation</span><span class="proj-metric-val">Independent GMAT cross-check</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-blue">Go</span>
+          <span class="tag tag-purple">TypeScript</span>
+          <span class="tag tag-red">SGP4</span>
+          <span class="tag tag-teal">REST API</span>
+        </div>
+        <div class="proj-links">
+          <a href="https://github.com/flaxnaz/ground-station-scheduler" class="proj-link" target="_blank">github →</a>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-accent" style="background:var(--purple)"></div>
+        <div class="proj-name">sat-telemetry-ros2</div>
+        <div class="proj-type">Multi-node telemetry pipeline</div>
+        <div class="proj-desc">
+          Three-node ROS2 Humble (C++17) pipeline streaming, logging, and fault-detecting satellite telemetry, plus a Manoeuvre action server. Custom rosidl interfaces, rosbag HIL replay, and a live interactive dashboard. arXiv paper submitted under cs.RO.
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric-row"><span class="proj-metric-key">Nodes</span><span class="proj-metric-val">Publisher · logger · fault detector</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Rate</span><span class="proj-metric-val">1 Hz typed SatState</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Interfaces</span><span class="proj-metric-val">Custom rosidl messages</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Replay</span><span class="proj-metric-val">rosbag HIL sessions</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-purple">C++17</span>
+          <span class="tag tag-purple">ROS2 Humble</span>
+          <span class="tag tag-blue">rosbag HIL</span>
+        </div>
+        <div class="proj-links">
+          <a href="https://github.com/flaxnaz/sat-telemetry-ros2" class="proj-link" target="_blank">github →</a>
+          <a href="https://flaxnaz.github.io/sat-telemetry-ros2" class="proj-link live" target="_blank">live dashboard →</a>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-accent" style="background:var(--amber)"></div>
+        <div class="proj-name">sat-telemetry-logger</div>
+        <div class="proj-type">Hardware telemetry pipeline</div>
+        <div class="proj-desc">
+          Configurable telemetry capture, binary packet parsing, and real-time monitoring tool. Threaded producer/consumer pipeline with CSV + SQLite dual logging and threshold-based anomaly detection. Applicable to satellite HIL test campaigns.
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric-row"><span class="proj-metric-key">Packet format</span><span class="proj-metric-val">24-byte binary · checksum</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Capture rate</span><span class="proj-metric-val">10 Hz · 0% packet loss</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Storage</span><span class="proj-metric-val">CSV + SQLite dual logging</span></div>
+          <div class="proj-metric-row"><span class="proj-metric-key">Config</span><span class="proj-metric-val">YAML-driven · CLI arguments</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-teal">Python</span>
+          <span class="tag tag-amber">Binary parsing</span>
+          <span class="tag tag-amber">Threading</span>
+        </div>
+        <div class="proj-links">
+          <a href="https://github.com/flaxnaz/sat-telemetry-logger" class="proj-link" target="_blank">github →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <div class="section-label">Technical</div>
+    <div class="section-title">Skills</div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">Python</div>
+        <div class="skill-desc">NumPy · SciPy · pytest · mypy</div>
+        <div class="bar"><div class="bar-fill" style="width:75%;background:var(--teal)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Go</div>
+        <div class="skill-desc">Orbital mechanics · REST APIs · concurrency</div>
+        <div class="bar"><div class="bar-fill" style="width:65%;background:var(--blue)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">TypeScript</div>
+        <div class="skill-desc">Node.js · REST proxies · dashboards</div>
+        <div class="bar"><div class="bar-fill" style="width:60%;background:var(--purple)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">C++</div>
+        <div class="skill-desc">ROS2 Humble · systems programming</div>
+        <div class="bar"><div class="bar-fill" style="width:80%;background:var(--blue)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">MATLAB</div>
+        <div class="skill-desc">EKF · orbit det. · thesis pipeline</div>
+        <div class="bar"><div class="bar-fill" style="width:85%;background:var(--purple)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Astrodynamics</div>
+        <div class="skill-desc">Two-body · J2 · SGP4 · NRHO · conjunction screening</div>
+        <div class="bar"><div class="bar-fill" style="width:80%;background:var(--teal)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">CI/CD & Live Dashboards</div>
+        <div class="skill-desc">GitHub Actions · scheduled workflows · GitHub Pages</div>
+        <div class="bar"><div class="bar-fill" style="width:80%;background:var(--red)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">CAD</div>
+        <div class="skill-desc">CATIA V5 · SolidWorks · Fusion 360 · Siemens NX · AutoCAD</div>
+        <div class="bar"><div class="bar-fill" style="width:75%;background:var(--amber)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Simulation & Analysis</div>
+        <div class="skill-desc">ANSYS Fluent (CFD) · SolidWorks Simulation (FEA)</div>
+        <div class="bar"><div class="bar-fill" style="width:75%;background:var(--red)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Mission Design Tools</div>
+        <div class="skill-desc">GMAT · STK · SPICE ephemerides</div>
+        <div class="bar"><div class="bar-fill" style="width:85%;background:var(--teal)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Systems engineering</div>
+        <div class="skill-desc">Mission analysis · trade studies · STK</div>
+        <div class="bar"><div class="bar-fill" style="width:75%;background:var(--blue)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Hardware comms</div>
+        <div class="skill-desc">Binary parsing · serial · telemetry</div>
+        <div class="bar"><div class="bar-fill" style="width:65%;background:var(--amber)"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Git & GitHub</div>
+        <div class="skill-desc">7 public repos · clean commit history</div>
+        <div class="bar"><div class="bar-fill" style="width:70%;background:var(--purple)"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section" id="experience">
+    <div class="section-label">Background</div>
+    <div class="section-title">Experience</div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-date">2025 — Present</div>
+        <div class="timeline-title">Founder — AstroFlux</div>
+        <div class="timeline-org">Sydney, Australia</div>
+        <div class="timeline-desc">Early-stage aerospace startup focused on mission logistics and launch planning support. UNSW Peter Farrell Cup semi-finalist. Built pitch materials, value propositions, and strategic messaging.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">Feb 2023 — Jul 2023</div>
+        <div class="timeline-title">Innovation Consultant — Tata AutoComp Systems</div>
+        <div class="timeline-org">University of Sydney</div>
+        <div class="timeline-desc">Developed and presented a concept proposal directly to the Chairman of Tata Group. Selected to represent the University of Sydney at an international conference attended by senior Tata Group leadership.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">Feb 2023 — Jul 2023</div>
+        <div class="timeline-title">Innovation Consultant — Vizzy</div>
+        <div class="timeline-org">University of Sydney Business School Startup</div>
+        <div class="timeline-desc">Delivered software optimisation and revenue growth strategy analysis for an early-stage startup incubated within the University of Sydney Business School.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">Aug 2022 — Nov 2022</div>
+        <div class="timeline-title">Research Intern — USYD Rocketry Team</div>
+        <div class="timeline-org">University of Sydney · Mentor: Prof. Matthew Cleary</div>
+        <div class="timeline-desc">Researched hybrid rocket engine combustion performance, analysing chamber pressure, specific impulse, and combustion efficiency using MATLAB and ANSYS Fluent CFD.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="section" id="education">
+    <div class="section-label">Background</div>
+    <div class="section-title">Education</div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-date">Sep 2024 — Dec 2025</div>
+        <div class="timeline-title">MEng Space Systems Engineering</div>
+        <div class="timeline-org">UNSW Sydney · Supervisor: Prof. Andrew Dempster, ACSER</div>
+        <div class="timeline-desc">Thesis: GNSS-assisted CubeSat orbit determination in cis-lunar space. Implemented Extended Kalman Filter state estimation in MATLAB. Evaluated LunaNet augmentation and GNSS side-lobe tracking architectures.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">Jul 2019 — Aug 2023</div>
+        <div class="timeline-title">BTech Aeronautical Engineering</div>
+        <div class="timeline-org">Manipal Institute of Technology · India — Final year via Study Abroad Program, University of Sydney (Jul 2022 – Jul 2023)</div>
+        <div class="timeline-desc">Core foundations in aerodynamics, aircraft structures, propulsion, avionics, thermodynamics, and engineering mechanics.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="section-label">Get in touch</div>
+    <div class="section-title">Contact</div>
+    <div class="contact-grid">
+      <a href="mailto:flaxnaz@gmail.com" class="contact-card">
+        <div class="contact-label">Email</div>
+        <div class="contact-val">flaxnaz@gmail.com</div>
+      </a>
+      <a href="https://github.com/flaxnaz" class="contact-card" target="_blank">
+        <div class="contact-label">GitHub</div>
+        <div class="contact-val">github.com/flaxnaz</div>
+      </a>
+      <a href="https://linkedin.com/in/flaxon-nazareth" class="contact-card" target="_blank">
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-val">linkedin.com/in/flaxon-nazareth</div>
+      </a>
+      <a href="https://flaxnaz.github.io/sda-tracker/" class="contact-card" target="_blank">
+        <div class="contact-label">Live dashboard</div>
+        <div class="contact-val">sda-tracker</div>
+      </a>
+      <a href="https://flaxnaz.github.io/conjunction-screener/" class="contact-card" target="_blank">
+        <div class="contact-label">Live dashboard</div>
+        <div class="contact-val">conjunction-screener</div>
+      </a>
+      <a href="https://flaxnaz.github.io/orbital-sentinel/dashboard/" class="contact-card" target="_blank">
+        <div class="contact-label">Live dashboard</div>
+        <div class="contact-val">orbital-sentinel</div>
+      </a>
+      <a href="https://flaxnaz.github.io/sat-telemetry-ros2" class="contact-card" target="_blank">
+        <div class="contact-label">Live dashboard</div>
+        <div class="contact-val">sat-telemetry-ros2</div>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">
+    Flaxon Nazareth · MEng Space Systems Engineering · UNSW Sydney 2025 · Built with HTML/CSS
+  </div>
+</footer>
+
+<script>
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.trajectory').forEach(function (svg) {
+      if (svg.pauseAnimations) svg.pauseAnimations();
+    });
+  }
+</script>
+
+</body>
+</html>
